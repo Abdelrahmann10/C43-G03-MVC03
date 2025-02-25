@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKEA.PL", "IKEA.PL\IKEA.PL.csproj", "{71A7CC8D-2A6C-4ECF-A1DB-74C54B6F8B37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKEA.DAL", "IKEA.DAL\IKEA.DAL.csproj", "{9ED84BD6-9274-4788-A231-93C1F5156271}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKEA.BLL", "IKEA.BLL\IKEA.BLL.csproj", "{AFDEEC31-3C1B-462B-A714-09F967108CCC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71A7CC8D-2A6C-4ECF-A1DB-74C54B6F8B37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71A7CC8D-2A6C-4ECF-A1DB-74C54B6F8B37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71A7CC8D-2A6C-4ECF-A1DB-74C54B6F8B37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71A7CC8D-2A6C-4ECF-A1DB-74C54B6F8B37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ED84BD6-9274-4788-A231-93C1F5156271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ED84BD6-9274-4788-A231-93C1F5156271}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ED84BD6-9274-4788-A231-93C1F5156271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ED84BD6-9274-4788-A231-93C1F5156271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFDEEC31-3C1B-462B-A714-09F967108CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDEEC31-3C1B-462B-A714-09F967108CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDEEC31-3C1B-462B-A714-09F967108CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDEEC31-3C1B-462B-A714-09F967108CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3C25DBD-4AE2-4885-8985-BC66F3B62C30}
+	EndGlobalSection
+EndGlobal
