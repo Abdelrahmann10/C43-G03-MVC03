@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IKEA.DAL.Presistance.Departments
+namespace IKEA.DAL.Presistance.Repositories.Departments
 {
-    internal interface IDepartmentRepo
+    public interface IDepartmentRepo
     {
-        IEnumerable<Department>GetAll(bool WithAsNoTracking = true);
+        IEnumerable<Department> GetAll(bool WithAsNoTracking = true);
+        IQueryable<Department> GetAllAsQuarable();
         Department? GetById(int id);
         int Add(Department entity);
         int Update(Department entity);

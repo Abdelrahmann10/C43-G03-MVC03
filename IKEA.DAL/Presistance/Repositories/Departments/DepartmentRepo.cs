@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IKEA.DAL.Presistance.Departments
+namespace IKEA.DAL.Presistance.Repositories.Departments
 {
-    internal class DepartmentRepo : IDepartmentRepo
+    public class DepartmentRepo : IDepartmentRepo
     {
         private readonly AppDbContext _dbContext;
 
@@ -21,7 +21,7 @@ namespace IKEA.DAL.Presistance.Departments
 
         public IEnumerable<Department> GetAll(bool WithAsNoTracking = true)
         {
-            if(WithAsNoTracking)
+            if (WithAsNoTracking)
             {
                 _dbContext.Departments.AsNoTracking().ToList();
             }
@@ -33,6 +33,10 @@ namespace IKEA.DAL.Presistance.Departments
             //var department = _dbContext.Departments.Local.FirstOrDefault(D => D.Id == id);
             var department = _dbContext.Departments.Find(id);
             return department;
+        }
+        public IQueryable<Department> GetAllAsQuarable()
+        {
+            return _dbContext.Departments;
         }
         public int Add(Department entity)
         {
@@ -51,5 +55,6 @@ namespace IKEA.DAL.Presistance.Departments
             _dbContext.Departments.Remove(entity);
             return _dbContext.SaveChanges();
         }
+
     }
 }
