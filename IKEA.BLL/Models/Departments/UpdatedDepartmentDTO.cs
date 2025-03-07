@@ -15,6 +15,5 @@ namespace IKEA.BLL.Models.Departments
         public DateOnly CreationDate { get; set; }
         public int LastModificationBy { get; set; }
         public DateTime LastModificationOn { get; set; }
-
     }
 }

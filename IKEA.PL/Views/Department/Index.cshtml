@@ -23,24 +23,53 @@
        <tbody class="text-center">
            @foreach(var department in Model)
            {
-            <td> @department.Code </td>
-            <td> @department.Name </td>
-            <td> @department.CreationDate </td>
-            <td>
-                <a asp-controller="Department" asp-action="Details" asp-route-id="@department.Id" class="btn btn-warning">
-                    <i class="fas fa-eye"></i>Details
-                </a>
-            </td>
-            <td>
-                <a asp-controller="Department" asp-action="Edit" asp-route-id="@department.Id" class="btn btn-success">
+                var modalId = $"deleteModal_{department.Id}";
+               <tr>
+                    <td> @department.Code </td>
+                    <td> @department.Name </td>
+                    <td> @department.CreationDate </td>
+                    <td>
+                        <a asp-controller="Department" asp-action="Details" asp-route-id="@department.Id" class="btn btn-warning">
+                        <i class="fas fa-eye"></i>Details
+                        </a>
+                    </td>
+                    <td>
+                    <a asp-controller="Department" asp-action="Edit" asp-route-id="@department.Id" class="btn btn-success">
                     <i class="fas fa-edit"></i>Update
-                </a>
-            </td>
-            <td>
-                <a asp-controller="Department" asp-action="Delete" asp-route-id="@department.Id" class="btn btn-danger">
-                    <i class="fas fa-trash"></i>Delete
-                </a>
-            </td>
+                    </a>
+                    </td>
+                   @* <td>
+                      <a asp-controller="Department" asp-action="Delete" asp-route-id="@department.Id" class="btn btn-danger">
+                      <i class="fas fa-trash"></i>Delete
+                      </a>
+                   </td> *@
+                    <td>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@modalId">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+               </tr>
+                <!-- Modal -->
+                <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="exampleModalLabel_@department.Id" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel_@department.Id">Delete Department</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete the department "<strong>@department.Name</strong>"?
+                            </div>
+                            <div class="modal-footer">
+                                <form asp-action="Delete" asp-route-id="@department.Id" method="post">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
            }
         </tbody>
    </table> 
