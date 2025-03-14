@@ -1,6 +1,7 @@
 ﻿using IKEA.BLL.Models.Departments;
 using IKEA.BLL.Services;
 using IKEA.PL.Models.Departments;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IKEA.PL.Controllers
@@ -40,6 +41,7 @@ namespace IKEA.PL.Controllers
         #endregion
         #region Post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreatedDepartmentDTO department)
         {
             if(!ModelState.IsValid) //Server side validation
@@ -124,6 +126,8 @@ namespace IKEA.PL.Controllers
         #endregion
         #region Post
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
         public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
         {
             if(!ModelState.IsValid)
@@ -180,6 +184,8 @@ namespace IKEA.PL.Controllers
         #endregion
         #region Post
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
         public IActionResult Delete(int id)
         {
             var message = string.Empty;
@@ -196,8 +202,10 @@ namespace IKEA.PL.Controllers
             {
                 // 1- Log Exception
                 _logger.LogError(ex, ex.Message);
-                // 2- Set Message
-                message = _environment.IsDevelopment()? ex.Message : "Sorry, An error ocuured during deleting the department";
+                // 2- Get Detailed Error Message
+                var innerException = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                // 3- Set Message
+                message = _environment.IsDevelopment() ? innerException : "Sorry, an error occurred while deleting this Department :(";
             }
             return RedirectToAction(nameof(Index));
         }
