@@ -3,6 +3,8 @@ using IKEA.BLL.Services.Employees;
 using IKEA.DAL.Presistance.Data;
 using IKEA.DAL.Presistance.Repositories.Departments;
 using IKEA.DAL.Presistance.Repositories.Employees;
+using IKEA.DAL.Presistance.UnitOfWork;
+using IKEA.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace IKEA.PL
@@ -17,12 +19,16 @@ namespace IKEA.PL
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<AppDbContext>((optionsBuilder =>
             {
+                optionsBuilder.UseLazyLoadingProxies();
                 optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }));
-            builder.Services.AddScoped<IDepartmentRepo,DepartmentRepo>();
+            //builder.Services.AddScoped<IDepartmentRepo,DepartmentRepo>();
+            //builder.Services.AddScoped<IEmployeeRepo,EmployeeRepo>();
+            builder.Services.AddScoped<IUintOfWork, UnitOfWork>();
+
             builder.Services.AddScoped<IDepartmentService,DepartmentService>();
-            builder.Services.AddScoped<IEmployeeRepo,EmployeeRepo>();
             builder.Services.AddScoped<IEmployeeService,EmployeeService>();
+            builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
             #endregion
 
             var app = builder.Build();
@@ -34,7 +40,7 @@ namespace IKEA.PL
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

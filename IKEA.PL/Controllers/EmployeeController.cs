@@ -1,5 +1,6 @@
 ﻿using IKEA.BLL.Models.Departments;
 using IKEA.BLL.Models.Employees;
+using IKEA.BLL.Services;
 using IKEA.BLL.Services.Employees;
 using IKEA.PL.Models.Departments;
 using Microsoft.AspNetCore.Mvc;
@@ -12,21 +13,23 @@ namespace IKEA.PL.Controllers
         private readonly IEmployeeService _employeeService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<EmployeeController> _logger;
+        //private readonly IDepartmentService _departmentService;
 
-        public EmployeeController(IEmployeeService employeeService, IWebHostEnvironment webHostEnvironment, ILogger<EmployeeController> logger) //Ask CLR for creating object from EmployeeService implicitly
+        public EmployeeController(IEmployeeService employeeService, IWebHostEnvironment webHostEnvironment, ILogger<EmployeeController> logger, IDepartmentService departmentService) //Ask CLR for creating object from EmployeeService implicitly
         {
             _employeeService = employeeService;
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
+            //_departmentService = departmentService;
         }
         #endregion
 
         #region Index
         //Employee/Index
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index( string search)
         {
-            var employees = _employeeService.GetAllEmployee();
+            var employees = _employeeService.GetEmployee(search);
             return View(employees);
         }
         #endregion
@@ -101,7 +104,7 @@ namespace IKEA.PL.Controllers
         #region Edit
         #region Get
         [HttpGet] //Employee/Edit/id?
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int? id, [FromServices] IDepartmentService departmentService)
         {
             if (id is null)
             {
@@ -112,6 +115,7 @@ namespace IKEA.PL.Controllers
             {
                 return NotFound(); // error 404
             }
+            ViewData["Department"] = departmentService.GetAllDepartment();
             return View(new UpdatedEmployeeDto()
             {
                 Name = employee.Name,

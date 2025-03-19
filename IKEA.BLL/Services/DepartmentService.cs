@@ -1,6 +1,7 @@
 ﻿using IKEA.BLL.Models.Departments;
 using IKEA.DAL.Models.Departments;
 using IKEA.DAL.Presistance.Repositories.Departments;
+using IKEA.DAL.Presistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,16 @@ namespace IKEA.BLL.Services
 {
     public class DepartmentService : IDepartmentService
     {
-        private readonly IDepartmentRepo _departmentRepo;
-        public DepartmentService(IDepartmentRepo departmentRepo)
+        private readonly IUintOfWork _unitOfWork;
+
+        public DepartmentService(IUintOfWork unitOfWork)
         {
-            _departmentRepo = departmentRepo;
+            _unitOfWork = unitOfWork;
         }
 
         public IEnumerable<DepartmentToReturnDTO> GetAllDepartment()
         {
-            var departments = _departmentRepo.GetAllAsQuarable().Select(department => new DepartmentToReturnDTO
+            var departments = _unitOfWork.DepartmentRepo.GetAllAsQuarable().Select(department => new DepartmentToReturnDTO
             {
                 Id = department.Id,
                 Name = department.Name,
@@ -32,7 +34,7 @@ namespace IKEA.BLL.Services
 
         public DepartmentDetailsToReturnDTO? GetDepartmentById(int id)
         {
-            var department = _departmentRepo.GetById(id);
+            var department = _unitOfWork.DepartmentRepo.GetById(id);
             if (department is not null)
             {
                 return new DepartmentDetailsToReturnDTO
@@ -65,7 +67,8 @@ namespace IKEA.BLL.Services
                 LastModificationOn = DateTime.UtcNow,
                 //CreatedOn = DateTime.UtcNow,
             };
-            return _departmentRepo.Add(createddepartment);
+            _unitOfWork.DepartmentRepo.Add(createddepartment);
+            return _unitOfWork.Compelete();
         }
 
         public int UpdateDepartment(UpdatedDepartmentDTO departmentDTO)
@@ -80,17 +83,20 @@ namespace IKEA.BLL.Services
                 LastModificationBy = 1,
                 LastModificationOn = DateTime.UtcNow
             };
-            return _departmentRepo.Update(updateddepartment);
+            _unitOfWork.DepartmentRepo.Update(updateddepartment);
+            return _unitOfWork.Compelete();
+
         }
 
         public bool DeleteDepartment(int id)
         {
-            var department = _departmentRepo.GetById(id);
+            var departmentRepo = _unitOfWork.DepartmentRepo;
+            var department = departmentRepo.GetById(id);
                if(department is not null)
                {
-                  return _departmentRepo.Delete(department) > 0;
+                  departmentRepo.Delete(department);
                }
-               return false;
+            return _unitOfWork.Compelete() > 0;
         }
 
 

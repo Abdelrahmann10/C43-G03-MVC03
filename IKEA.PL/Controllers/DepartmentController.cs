@@ -1,4 +1,5 @@
-﻿using IKEA.BLL.Models.Departments;
+﻿using AutoMapper;
+using IKEA.BLL.Models.Departments;
 using IKEA.BLL.Services;
 using IKEA.PL.Models.Departments;
 using Microsoft.AspNetCore.Hosting;
@@ -11,12 +12,14 @@ namespace IKEA.PL.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly ILogger<CreatedDepartmentDTO> _logger;
         private readonly IWebHostEnvironment _environment;
+        private readonly IMapper _mapper;
 
-        public DepartmentController(IDepartmentService departmentService, ILogger<CreatedDepartmentDTO> logger, IWebHostEnvironment environment)
+        public DepartmentController(IDepartmentService departmentService, ILogger<CreatedDepartmentDTO> logger, IWebHostEnvironment environment, IMapper mapper)
         {
             _departmentService = departmentService;
             _logger = logger;
             _environment = environment;
+            _mapper = mapper;
         }
 
 
@@ -25,6 +28,11 @@ namespace IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            // View's dictionary : Pass data from controller to View [from this view => Partial view, LayOut]
+            // 1- ViewData : is a Dictionary type property (Introduced in ASP.NET FrameWork 3.5) helps us to transfer the data from controller[Action] to view
+            ViewData["Message"] = "Hello ViewData";
+            // 2- ViewBag : is a Dynamic type property (Introduced in ASP.NET FrameWork 4(*based on dynamic prop*)) helps us to transfer the data from controller[Action] to view
+            ViewBag.Message = "Hello ViewBag";
             var department = _departmentService.GetAllDepartment();
             return View(department);
         }
@@ -42,25 +50,29 @@ namespace IKEA.PL.Controllers
         #region Post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreatedDepartmentDTO department)
+        public IActionResult Create(DepartmentEditViewModel departmentVm)
         {
             if(!ModelState.IsValid) //Server side validation
             {
-                return View(department);
+                return View(departmentVm);
             }
             var message = string.Empty;
             try
             {
-                var result = _departmentService.CreateDepartment(department);
+                var createddepartment = _mapper.Map<CreatedDepartmentDTO>(departmentVm);
+                var result = _departmentService.CreateDepartment(createddepartment);
+                // 3- ViewData : is a property type Dictionary object (Introduced in ASP.NET FrameWork 3.5) helps us to transfer the data between 2 requests
                 if (result > 0)
                 {
+                    TempData["Message"] = "Department Is Created";
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    message = "Department is not created";
+                    TempData["Message"] = "Department Has Not been Created";
+                    message = "Department Has Not been Created";
                     ModelState.AddModelError(string.Empty,message);
-                    return View(department);
+                    return View(departmentVm);
                 }
             }
             catch (Exception ex)
@@ -71,7 +83,7 @@ namespace IKEA.PL.Controllers
                 if(_environment.IsDevelopment())
                 {
                     message = ex.Message;
-                    return View(department);
+                    return View(departmentVm);
                 }
                 else
                 {
@@ -115,13 +127,8 @@ namespace IKEA.PL.Controllers
             {
                 return NotFound();
             }
-            return View(new DepartmentEditViewModel()
-            {
-                Code = department.Code,
-                Name = department.Name,
-                Description = department.Description,
-                CreationDate = department.CreationDate
-            });
+            var departmentVm = _mapper.Map<DepartmentDetailsToReturnDTO, DepartmentEditViewModel>(department);
+            return View(departmentVm);
         }
         #endregion
         #region Post
@@ -137,16 +144,18 @@ namespace IKEA.PL.Controllers
             var message = string.Empty;
             try
             {
-                var updateDepartment = new UpdatedDepartmentDTO()
-                {
-                    Id = id,
-                    Code = departmentVM.Code,
-                    Name = departmentVM.Name,
-                    Description = departmentVM.Description,
-                    CreationDate = departmentVM.CreationDate
-                };
-                var updated = _departmentService.UpdateDepartment(updateDepartment) > 0;
-                if(updated)
+                //manual mapping
+                //var updateDepartment = new UpdatedDepartmentDTO()
+                //{
+                //    Id = id,
+                //    Code = departmentVM.Code,
+                //    Name = departmentVM.Name,
+                //    Description = departmentVM.Description,
+                //    CreationDate = departmentVM.CreationDate
+                //};
+                var updatedDepartment = _mapper.Map<UpdatedDepartmentDTO>(departmentVM);
+                var result = _departmentService.UpdateDepartment(updatedDepartment) > 0;
+                if(result)
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -170,12 +179,12 @@ namespace IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
-            if(id is null)
+            if (id is null)
             {
                 return BadRequest();
             }
             var department = _departmentService.GetDepartmentById(id.Value);
-            if(department is null)
+            if (department is null)
             {
                 return NotFound();
             }
@@ -184,7 +193,7 @@ namespace IKEA.PL.Controllers
         #endregion
         #region Post
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
 
         public IActionResult Delete(int id)
         {

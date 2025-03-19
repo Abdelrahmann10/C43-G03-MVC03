@@ -1,4 +1,5 @@
 ﻿using IKEA.DAL.Common.Enums;
+using IKEA.DAL.Models.Departments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,15 @@ namespace IKEA.DAL.Models.Employees
         public decimal? Salary { get; set; }
         public bool IsActive { get; set; }
         public string? Email { get; set; }
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         public DateTime HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
+
+        #region For Department
+        public int? DepartmentId { get; set; }
+        // Navigational Property [One]
+        public virtual Department? Department { get; set; }
+        #endregion
     }
 }

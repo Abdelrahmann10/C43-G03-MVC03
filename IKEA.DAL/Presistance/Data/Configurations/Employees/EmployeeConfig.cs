@@ -26,6 +26,8 @@ namespace IKEA.DAL.Presistance.Data.Configurations.Employees
                 .HasConversion(
                 (type) => type.ToString(),
                 (type) => (EmployeeType)Enum.Parse(typeof(EmployeeType), type));
+
+            
         }
     }
 }

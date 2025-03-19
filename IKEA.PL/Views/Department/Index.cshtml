@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<DepartmentToReturnDTO>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Departments";
+    // string ViewDataMessage = ViewData["Message"] as string;
+    // // Compiler can enfoce type safty
+    // string? ViewBagMessage = ViewBag.Message;
+    // // Compiler will escape Type  checking at compilation time
 }
+@* <div class="alert alert-info">
+    @ViewData["Message"]
+</div>
+<div class="alert alert-info">
+    @ViewBag.Message
+</div> *@
 <h1>All Departments</h1>
 <br />
 <a asp-controller="Department" asp-action="Create" class="btn btn-primary">
@@ -55,9 +65,9 @@
                         </div>
                     </div>
                 </div>
-            }
            }
-        </tbody>
+}
+       </tbody>
    </table> 
 }
 else

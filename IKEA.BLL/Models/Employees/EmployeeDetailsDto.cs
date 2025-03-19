@@ -32,6 +32,7 @@ namespace IKEA.BLL.Models.Employees
         public DateTime HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        public string? Department { get; set; }
 
         #region Adminstration
         public int CreatedBy { get; set; }

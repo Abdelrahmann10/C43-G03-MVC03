@@ -1,5 +1,4 @@
 ﻿@model EmployeeDetailsDto
-
 @{
     ViewData["Title"] = "Employee Details";
 }
@@ -31,7 +30,10 @@
                 <label class="form-label" asp-for="Email"></label>
                 <input asp-for="Email" class="form-control" readonly />
             </div>
-
+            <div class="form-group col-6 mb-4">
+                <label class="form-label" asp-for="Department"></label>
+                <input asp-for="Department" class="form-control" disabled />
+            </div>
             <div class="form-group col-6 mb-4">
                 <label class="form-label" asp-for="Address"></label>
                 <input asp-for="Address" class="form-control" readonly />
@@ -48,6 +50,7 @@
                 <label class="form-label" asp-for="PhoneNumber"></label>
                 <input asp-for="PhoneNumber" class="form-control" readonly />
             </div>
+            
             <div class="form-group col-6 mb-4">
                 <label asp-for="EmployeeType" class="control-label mb-2"></label>
                 <select asp-for="EmployeeType" disabled asp-items="Html.GetEnumSelectList<EmployeeType>()" class="form-control">

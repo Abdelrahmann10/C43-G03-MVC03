@@ -1,6 +1,11 @@
-﻿@model CreatedEmployeeDto
+﻿@using IKEA.BLL.Services
+@using IKEA.DAL.Common.Enums
+@using IKEA.DAL.Models.Departments
+@model CreatedEmployeeDto
+@inject IDepartmentService departmentService
 @{
     ViewData["Title"] = "Create";
+    var Departments = new SelectList(departmentService.GetAllDepartment(), nameof(DepartmentDetailsToReturnDTO.Id), nameof(DepartmentDetailsToReturnDTO.Name));
 
 }
 <h1>Create New Employee</h1>
@@ -42,7 +47,12 @@
             <input asp-for="PhoneNumber" class="form-control mb-3" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
-
+        <div class="form-group col-6 mb-4">
+            <label asp-for="DepartmentId" class="control-label mb-2"></label>
+            <select asp-for="DepartmentId" asp-items="@Departments" class="form-control">
+                <option value="@null">Choose...</option>
+            </select>
+        </div>
 
         <div class="form-group col-6">
             <label asp-for="EmployeeType" class="control-label mb-2"></label>
